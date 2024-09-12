@@ -74,7 +74,7 @@ const Switch: React.AbstractComponent<
   }
 
   const { height: styleHeight, width: styleWidth } = StyleSheet.flatten(style);
-  const height = styleHeight || '20px';
+  const height = styleHeight || '26px';
   const minWidth = multiplyStyleLengthValue(height, 2);
   const width = styleWidth > minWidth ? styleWidth : minWidth;
   const trackBorderRadius = multiplyStyleLengthValue(height, 0.5);
@@ -204,10 +204,11 @@ const styles = StyleSheet.create({
   track: {
     forcedColorAdjust: 'none',
     ...StyleSheet.absoluteFillObject,
-    height: '70%',
+    height: '105%',
     margin: 'auto',
-    transitionDuration: '0.1s',
-    width: '100%'
+    transitionDuration: '0.3s',
+    width: '90%',
+    marginLeft: 6
   },
   thumb: {
     forcedColorAdjust: 'none',
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
     boxShadow: thumbDefaultBoxShadow,
     start: '0%',
     transform: 'translateZ(0)',
-    transitionDuration: '0.1s'
+    transitionDuration: '0.3s'
   },
   thumbActive: {
     insetInlineStart: '100%'
