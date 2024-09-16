@@ -175,8 +175,7 @@ const Image: React.AbstractComponent<
   React.ElementRef<typeof View>
 > = React.forwardRef((props, ref) => {
   const {
-    'aria-label': _ariaLabel,
-    accessibilityLabel,
+    'aria-label': ariaLabel,
     blurRadius,
     defaultSource,
     draggable,
@@ -190,7 +189,6 @@ const Image: React.AbstractComponent<
     style,
     ...rest
   } = props;
-  const ariaLabel = _ariaLabel || accessibilityLabel;
 
   if (process.env.NODE_ENV !== 'production') {
     if (props.children) {

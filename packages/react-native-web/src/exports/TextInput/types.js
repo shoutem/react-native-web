@@ -69,7 +69,6 @@ export type TextInputProps = {
     end?: number
   |},
   selectionColor?: ?ColorValue,
-  showSoftInputOnFocus?: ?boolean,
   spellCheck?: ?boolean,
   style?: ?GenericStyleProp<TextInputStyle>,
   value?: ?string,

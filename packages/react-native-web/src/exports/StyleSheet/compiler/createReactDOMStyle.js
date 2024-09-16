@@ -139,6 +139,10 @@ const createReactDOMStyle = (style: Style, isInline?: boolean): Style => {
         resolvedStyle.flexGrow = 0;
         resolvedStyle.flexShrink = 1;
         resolvedStyle.flexBasis = 'auto';
+      } else if (value === 0) {
+        resolvedStyle.flexGrow = 0;
+        resolvedStyle.flexShrink = 0;
+        resolvedStyle.flexBasis = 'auto';
       } else {
         resolvedStyle.flex = value;
       }
