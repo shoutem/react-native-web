@@ -8,57 +8,69 @@ export default function useDraggableScroll({
 }) {
 
   useEffect(() => {
-      if (Platform.OS !== 'web' || !outerRef) {
-        return
+      if (Platform.OS !== 'web' || !outerRef || !outerRef.current) {
+        return;
       }
       const slider = (findNodeHandle(outerRef.current));
       if (!slider) {
-        return
+        return;
       }
-      let isDragging = false
-      let isMouseDown = false
-      let startX = 0
-      let scrollLeft = 0
+      let isDragging = false;
+      let isMouseDown = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      const smoothScroll = (newScrollLeft) => {
+        requestAnimationFrame(() => {
+          slider.scrollLeft = newScrollLeft;
+        });
+      };
 
       const mouseDown = (e) => {
-        isMouseDown = true
-        startX = e.pageX - slider.offsetLeft
-        scrollLeft = slider.scrollLeft
-
-        slider.style.cursor = cursor
-      }
+        isMouseDown = true;
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+        slider.style.cursor = cursor;
+      };
 
       const mouseUp = () => {
-        if (isDragging) slider.addEventListener("click", (e) => e.stopPropagation(), { once: true })
- 
-        isMouseDown = false
-        isDragging = false
-        slider.style.cursor = 'default'
-      }
+        if (isDragging) {
+          slider.addEventListener(
+            'click',
+            (e) => e.stopPropagation(),
+            { once: true }
+          );
+        }
+        isMouseDown = false;
+        isDragging = false;
+        slider.style.cursor = 'default';
+      };
 
       const mouseMove = (e) => {
-        if (!isMouseDown) return
+        if (!isMouseDown) return;
         
-        // Require n pixels momement before start of drag (3 in this case )
-        const x = e.pageX - slider.offsetLeft
-        if (Math.abs(x - startX) < 3) return
+        const x = e.pageX - slider.offsetLeft;
+        // Only activate drag if moved enough pixels
+        if (Math.abs(x - startX) < 3) return;
         
-        isDragging = true
-        e.preventDefault()
-        const walk = x - startX
-        slider.scrollLeft = scrollLeft - walk
+        isDragging = true;
+        e.preventDefault();
+  
+        const walk = x - startX;
+        const newScrollLeft = scrollLeft - walk;
+        smoothScroll(newScrollLeft);
       }
 
-      slider.addEventListener('mousedown', mouseDown)
-      window.addEventListener('mouseup', mouseUp)
-      window.addEventListener('mousemove', mouseMove)
+      slider.addEventListener('mousedown', mouseDown);
+      window.addEventListener('mouseup', mouseUp);
+      window.addEventListener('mousemove', mouseMove);
 
       return () => {
-        slider.removeEventListener('mousedown', mouseDown)
-        window.removeEventListener('mouseup', mouseUp)
-        window.removeEventListener('mousemove', mouseMove)
-      }
+        slider.removeEventListener('mousedown', mouseDown);
+        window.removeEventListener('mouseup', mouseUp);
+        window.removeEventListener('mousemove', mouseMove);
+      };
     },
-    [cursor]
+    [outerRef, cursor]
   );
 }
