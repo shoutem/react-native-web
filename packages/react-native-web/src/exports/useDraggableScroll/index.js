@@ -4,11 +4,12 @@ import findNodeHandle from '../findNodeHandle';
 
 export default function useDraggableScroll({
   outerRef = null,
+  horizontal = false,
   cursor = 'grab',
 }) {
 
   useEffect(() => {
-      if (Platform.OS !== 'web' || !outerRef || !outerRef.current) {
+      if (Platform.OS !== 'web' || !outerRef || !outerRef.current || !horizontal) {
         return;
       }
       const slider = (findNodeHandle(outerRef.current));

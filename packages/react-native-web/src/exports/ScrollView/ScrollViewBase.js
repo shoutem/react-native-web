@@ -94,6 +94,7 @@ const ScrollViewBase: React.AbstractComponent<
 
   useDraggableScroll({
     outerRef: scrollRef,
+    horizontal,
   })
 
   function createPreventableScrollHandler(handler: Function) {
