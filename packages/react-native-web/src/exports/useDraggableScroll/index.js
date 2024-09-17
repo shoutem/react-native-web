@@ -5,6 +5,7 @@ import findNodeHandle from '../findNodeHandle';
 export default function useDraggableScroll({
   outerRef = null,
   horizontal = false,
+  pagingEnabled = false,
   cursor = 'grab',
 }) {
 
@@ -21,10 +22,11 @@ export default function useDraggableScroll({
       let startX = 0;
       let scrollLeft = 0;
 
-      const smoothScroll = (newScrollLeft) => {
-        requestAnimationFrame(() => {
-          slider.scrollLeft = newScrollLeft;
-        });
+      const getPageWidth = () => {
+        if (slider.children.length > 0) {
+          return slider.children[0].children[0].offsetWidth; // Assume all pages are the same width
+        }
+        return slider.offsetWidth; // Default to slider's width if no children found
       };
 
       const mouseDown = (e) => {
@@ -32,6 +34,7 @@ export default function useDraggableScroll({
         startX = e.pageX - slider.offsetLeft;
         scrollLeft = slider.scrollLeft;
         slider.style.cursor = cursor;
+        slider.style.scrollBehavior = 'auto';
       };
 
       const mouseUp = () => {
@@ -45,6 +48,14 @@ export default function useDraggableScroll({
         isMouseDown = false;
         isDragging = false;
         slider.style.cursor = 'default';
+
+        if (pagingEnabled) {
+          slider.style.scrollBehavior = 'smooth';
+          const currentScroll = slider.scrollLeft;
+          const pageWidth = getPageWidth();
+          const nearestPage = Math.round(currentScroll / pageWidth);
+          slider.scrollLeft = nearestPage * pageWidth;
+        }
       };
 
       const mouseMove = (e) => {
@@ -58,8 +69,7 @@ export default function useDraggableScroll({
         e.preventDefault();
   
         const walk = x - startX;
-        const newScrollLeft = scrollLeft - walk;
-        smoothScroll(newScrollLeft);
+        slider.scrollLeft = scrollLeft - walk;
       }
 
       slider.addEventListener('mousedown', mouseDown);
@@ -72,6 +82,6 @@ export default function useDraggableScroll({
         window.removeEventListener('mousemove', mouseMove);
       };
     },
-    [outerRef, cursor]
+    [outerRef, cursor, pagingEnabled]
   );
 }

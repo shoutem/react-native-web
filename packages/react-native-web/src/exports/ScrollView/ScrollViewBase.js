@@ -18,6 +18,7 @@ import useDraggableScroll from '../useDraggableScroll';
 type Props = {
   ...ViewProps,
   horizontal?: boolean,
+  pagingEnabled?: boolean,
   onMomentumScrollBegin?: (e: any) => void,
   onMomentumScrollEnd?: (e: any) => void,
   onScroll?: (e: any) => void,
@@ -85,6 +86,7 @@ const ScrollViewBase: React.AbstractComponent<
     showsVerticalScrollIndicator,
     style,
     horizontal,
+    pagingEnabled,
     ...rest
   } = props;
 
@@ -95,6 +97,7 @@ const ScrollViewBase: React.AbstractComponent<
   useDraggableScroll({
     outerRef: scrollRef,
     horizontal,
+    pagingEnabled,
   })
 
   function createPreventableScrollHandler(handler: Function) {
