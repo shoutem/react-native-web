@@ -582,16 +582,16 @@ class ScrollView extends React.Component<ScrollViewProps> {
     const hasStickyHeaderIndices =
       !horizontal && Array.isArray(stickyHeaderIndices);
     const children =
-      hasStickyHeaderIndices || pagingEnabled
+      hasStickyHeaderIndices || (pagingEnabled && !horizontal)
         ? React.Children.map(this.props.children, (child, i) => {
             const isSticky =
               hasStickyHeaderIndices && stickyHeaderIndices.indexOf(i) > -1;
-            if (child != null && (isSticky || pagingEnabled)) {
+            if (child != null && (isSticky || (pagingEnabled && !horizontal))) {
               return (
                 <View
                   style={[
                     isSticky && styles.stickyHeader,
-                    pagingEnabled && styles.pagingEnabledChild
+                    (pagingEnabled && !horizontal) && styles.pagingEnabledChild
                   ]}
                 >
                   {child}
@@ -624,7 +624,9 @@ class ScrollView extends React.Component<ScrollViewProps> {
 
     const props = {
       ...other,
-      style: [baseStyle, pagingEnabled && pagingEnabledStyle, this.props.style],
+      horizontal,
+      pagingEnabled,
+      style: [baseStyle, (pagingEnabled && !horizontal) && pagingEnabledStyle, this.props.style],
       onTouchStart: this.scrollResponderHandleTouchStart,
       onTouchMove: this.scrollResponderHandleTouchMove,
       onTouchEnd: this.scrollResponderHandleTouchEnd,

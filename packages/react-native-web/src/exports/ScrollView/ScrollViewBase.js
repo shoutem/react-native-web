@@ -13,9 +13,12 @@ import * as React from 'react';
 import StyleSheet from '../StyleSheet';
 import View from '../View';
 import useMergeRefs from '../../modules/useMergeRefs';
+import useDraggableScroll from '../useDraggableScroll';
 
 type Props = {
   ...ViewProps,
+  horizontal?: boolean,
+  pagingEnabled?: boolean,
   onMomentumScrollBegin?: (e: any) => void,
   onMomentumScrollEnd?: (e: any) => void,
   onScroll?: (e: any) => void,
@@ -82,12 +85,20 @@ const ScrollViewBase: React.AbstractComponent<
     showsHorizontalScrollIndicator,
     showsVerticalScrollIndicator,
     style,
+    horizontal,
+    pagingEnabled,
     ...rest
   } = props;
 
   const scrollState = React.useRef({ isScrolling: false, scrollLastTick: 0 });
   const scrollTimeout = React.useRef(null);
   const scrollRef = React.useRef(null);
+
+  useDraggableScroll({
+    outerRef: scrollRef,
+    horizontal,
+    pagingEnabled,
+  })
 
   function createPreventableScrollHandler(handler: Function) {
     return (e: Object) => {
